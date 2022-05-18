@@ -8,12 +8,9 @@
     }}</span>
     <button
       class="absolute top-1/2 right-10 -translate-y-1/2 translate-x-1/2 opacity-0 hover:scale-105 transition-all rounded-full bg-green-600 p-4 w-10 h-10 flex items-center justify-center"
+      @click="handlePlayMusic"
     >
-      <font-awesome-icon
-        :icon="['fas', 'play']"
-        class="text-xl text-black"
-        @click="handlePlayMusic"
-      />
+      <font-awesome-icon :icon="['fas', 'play']" class="text-xl text-black" />
     </button>
   </div>
 </template>
@@ -42,9 +39,9 @@ const props = defineProps({
 const { song } = props;
 
 const handlePlayMusic = async () => {
-  const res = await getSong(song.key);
-  console.log(res.song)
-  setPlayMusic(res.song);
+  // const res = await getSong(song.key);
+  // console.log(res.song);
+  setPlayMusic(song.key);
 };
 </script>
 

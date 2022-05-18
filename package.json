@@ -16,6 +16,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.0-5",
     "@liripeng/vue-audio-player": "^1.5.0",
     "@vueuse/core": "^8.5.0",
+    "moment": "^2.29.3",
     "nhaccuatui-api-full": "^1.1.0",
     "pinia": "^2.0.13",
     "swiper": "^8.1.4",

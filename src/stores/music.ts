@@ -51,8 +51,16 @@ export const useMusicStore = defineStore({
       const res = await getPlaylists();
       this.playlist = res;
     },
-    setPlayMusic(music: music) {
-      this.currentMusic = music;
+    async setPlayMusic(key: string) {
+      const music = await getSong(key);
+      this.currentMusic = music.song;
+      // this.musics.forEach((item) => {
+      //   music.key === item.key ? this.musics.splice(item, 1) : null;
+      // })
+    },
+    nextMusic() {
+      const index = this.musics.indexOf(this.currentMusic) ;
+      this.currentMusic = this.musics[index + 1];
     },
   },
 });
