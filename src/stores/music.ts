@@ -30,7 +30,6 @@ export const useMusicStore = defineStore({
     musics: [] as music[],
     playlist: [] as music[],
     currentMusic: {} as music,
-    playing: false,
   }),
   getters: {
     getMusics: (state) => state.musics,
@@ -54,13 +53,28 @@ export const useMusicStore = defineStore({
     async setPlayMusic(key: string) {
       const music = await getSong(key);
       this.currentMusic = music.song;
-      // this.musics.forEach((item) => {
-      //   music.key === item.key ? this.musics.splice(item, 1) : null;
-      // })
+      //  check musics length
+      if (this.musics.length === 0) {
+      }
+      this.musics.push(music.song);
     },
     nextMusic() {
-      const index = this.musics.indexOf(this.currentMusic) ;
-      this.currentMusic = this.musics[index + 1];
+      const index = this.musics.indexOf(this.currentMusic);
+      // check index
+      if (index === this.musics.length - 1) {
+        this.currentMusic = this.musics[0];
+      } else {
+        this.currentMusic = this.musics[index + 1];
+      }
+    },
+    prevMusic() {
+      const index = this.musics.indexOf(this.currentMusic);
+      // check index in last of array
+      if (index !== 0) {
+        this.currentMusic = this.musics[this.musics.length - 1];
+      } else {
+        return;
+      }
     },
   },
 });

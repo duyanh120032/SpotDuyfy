@@ -1,10 +1,10 @@
 <template>
   <div
-    class="fixed bottom-0 h-28 px-3 bg-gray-700 w-full flex justify-between items-center container mx-auto shadow-lg"
+    class="fixed bottom-0 h-28 px-3 bg-gray-900 w-full flex justify-between items-center container mx-auto shadow-lg"
     v-if="getCurrentMusic.artists"
   >
     <div class="w-1/3">
-      <div class="flex justify-start ">
+      <div class="flex justify-start">
         <img :src="getCurrentMusic.thumbnail" alt="" class="object-cover w-12 h-12" />
         <div class="flex flex-col px-2">
           <h6 class="font-semibold">{{ getCurrentMusic.title }}</h6>
@@ -28,6 +28,7 @@
         <button
           class="bg-green-600 p-2 rounded-full w-10 h-10 flex justify-center items-center hover:bg-green-700 transition-all"
           v-if="getCurrentMusic.streamUrls"
+          @click="handlePrev"
         >
           <font-awesome-icon :icon="['fas', 'backward-step']" class="text-xl text-white" />
         </button>
@@ -50,13 +51,32 @@
         <button
           class="bg-green-600 p-2 rounded-full w-10 h-10 flex justify-center items-center hover:bg-green-700 transition-all"
           v-if="getCurrentMusic.streamUrls"
+          @click="handleNext"
         >
           <font-awesome-icon :icon="['fas', 'forward-step']" class="text-xl text-white" />
         </button>
       </div>
-      <span>{{ `${timeLine}/${formatTime(duration)}` }}</span>
+      <div class="flex gap-4">
+        <span class="font-semibold text-gray-300">{{ timeLine }}</span>
+        <input
+          type="range"
+          :max="duration"
+          step="0.001"
+          :value="playerRef?.currentTime"
+          @change="onChangeTimeline"
+          class="h-auto outline-none"
+        />
+        <span class="font-semibold text-gray-300"> {{ `${formatTime(duration)}` }}</span>
+      </div>
     </div>
-    <progress :value="volume" min="0" max="1" @input="onChange">{{ volume }}</progress>
+    <input
+      type="range"
+      :value="playerRef?.volume"
+      min="0"
+      max="1"
+      @change="onChangeVolume"
+      step="0.01"
+    />
   </div>
 </template>
 
@@ -65,10 +85,10 @@ import { getSong } from "nhaccuatui-api-full";
 import { ref, onMounted, computed, watchEffect } from "vue";
 import { useMusicStore } from "@/stores/music";
 import { storeToRefs } from "pinia";
-import moment from "moment";
 
 // import type {music} from '../../stores/music'
 const { getCurrentMusic } = storeToRefs(useMusicStore());
+const { nextMusic, prevMusic } = useMusicStore();
 const playerRef = ref<any>(null);
 const isPlaying = ref(true);
 const timeLine = ref<number | string>(0);
@@ -102,12 +122,28 @@ const handlePause = () => {
   isPlaying.value = false;
 };
 
-const onChange = (e: any) => {
+const onChangeVolume = (e: any) => {
   playerRef.value.volume = e.target.value;
-  volume.value = e.target.value;
+};
+const onChangeTimeline = (e: any) => {
+  playerRef.value.currentTime = e.target.value;
+};
+const handlePrev = () => {
+  prevMusic();
+};
+const handleNext = () => {
+  nextMusic();
 };
 </script>
 
 <style>
+::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: #04aa6d;
+  cursor: pointer;
+}
 /* style audio tag */
 </style>

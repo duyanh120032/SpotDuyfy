@@ -13,17 +13,20 @@
           class="w-full bg-white rounded border-none border-gray-300 focus:border-none text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
           v-model="searchKey"
           @mouseover="showSearchResult = true"
-          @mouseout="showSearchResult = false"
+          ref="inputRef"
         />
       </form>
       <transition class="absolute top-9 z-10">
         <div v-if="showSearchResult" class="mt-3">
-          <TopKeyword />
+          <TopKeyword :keyword="topKeyword" />
         </div>
       </transition>
     </div>
 
     <!-- songs -->
+    <div v-if="recommend">
+      <Recommend :recommend="recommend" />
+    </div>
     <div v-if="songs.length > 0">
       <Label text="Songs" />
       <SongList :songs="songs" />
@@ -37,17 +40,21 @@ import { ref, watch, onMounted, reactive, toRefs } from "vue";
 import TopKeyword from "../components/search/TopKeyword.vue";
 import Label from "../components/home/Label.vue";
 import SongList from "../components/search/SongList.vue";
+import { onClickOutside } from "@vueuse/core";
+import Recommend from "../components/search/Recommend.vue";
+
 const searchKey = ref("");
-const topKeyword = ref("");
+const topKeyword = ref([]);
 const showSearchResult = ref(false);
 const result = reactive({
   songs: [],
   artists: [],
   albums: [],
   podcasts: [],
+  recommend: null,
 });
-const { songs, artists, albums, podcasts } = toRefs(result);
-
+const { songs, artists, albums, podcasts, recommend } = toRefs(result);
+const inputRef = ref(null);
 
 onMounted(async () => {
   const res = await getTopKeyword();
@@ -56,9 +63,14 @@ onMounted(async () => {
 const handleSearch = async () => {
   if (searchKey.value) {
     const res = await searchByKeyword(searchKey.value);
+    console.log(res);
     result.songs = res.search?.song.song;
+    result.recommend = res?.recommend;
   }
 };
+onClickOutside(inputRef, (event) => {
+  showSearchResult.value = false;
+});
 </script>
 
 <style scoped>
