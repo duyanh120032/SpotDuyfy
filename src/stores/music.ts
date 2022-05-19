@@ -37,6 +37,7 @@ export const useMusicStore = defineStore({
     getTopicEvents: (state) => state.home.topicEvent,
     topics: (state) => state.home.topic,
     getCurrentMusic: (state) => state.currentMusic,
+    isPlaying: (state) => state.currentMusic.key,
   },
   actions: {
     setMusics(musics: music[]) {
@@ -46,9 +47,11 @@ export const useMusicStore = defineStore({
       const res = await getHome();
       this.home = res;
     },
-    async setPlaylist() {
-      const res = await getPlaylists();
-      this.playlist = res;
+    setPlaylist(arr: any[]) {
+      if (arr) {
+        this.musics = arr;
+        this.currentMusic = arr[0];
+      }
     },
     async setPlayMusic(key: string) {
       const music = await getSong(key);
@@ -59,8 +62,9 @@ export const useMusicStore = defineStore({
       this.musics.push(music.song);
     },
     nextMusic() {
-      const index = this.musics.indexOf(this.currentMusic);
+      const index = this.musics.findIndex((music) => music.key === this.currentMusic.key);
       // check index
+
       if (index === this.musics.length - 1) {
         this.currentMusic = this.musics[0];
       } else {
@@ -68,10 +72,10 @@ export const useMusicStore = defineStore({
       }
     },
     prevMusic() {
-      const index = this.musics.indexOf(this.currentMusic);
+      const index = this.musics.findIndex((music) => music.key === this.currentMusic.key);
       // check index in last of array
       if (index !== 0) {
-        this.currentMusic = this.musics[this.musics.length - 1];
+        this.currentMusic = this.currentMusic = this.musics[index - 1];
       } else {
         return;
       }

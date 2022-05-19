@@ -21,6 +21,11 @@ const routes = [
     name: "search",
     component: () => import(/* webpackChunkName: "topic" */ "../pages/SearchView.vue"),
   },
+  {
+    path: "/playlist/:id",
+    name: "playlist",
+    component: () => import(/* webpackChunkName: "topic" */ "../pages/PlaylistView.vue"),
+  }
 ];
 
 export default createRouter({

@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="`/topic/${item.key}`" v-if="item">
+  <router-link :to="`/playlist/${item.key}`" v-if="item">
     <div
       class="bg-slate-400 bg-opacity-20 p-3 flex flex-col rounded-md overflow-hidden whitespace-nowrap hover:opacity-90 hover:bg-slate-500 transition-all card-item group"
       v-if="item"

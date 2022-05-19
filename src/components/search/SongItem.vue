@@ -1,10 +1,10 @@
 <template>
   <div
     class="p-3 bg-slate-700 bg-opacity-40 mb-3 rounded-md flex justify-between hover:bg-slate-200 hover:bg-opacity-25 song-item"
-    @click="logSong"
+    :class="{ 'bg-slate-100': isPlaying===song.key }"
   >
     <div class="flex gap-3">
-      <div class="reactive w-16 h-16">
+      <div class="relative w-16 h-16">
         <img
           :src="`${song.thumbnail ? song.thumbnail : 'https://avatar-ex-swe.nixcdn.com/song/None'}`"
           alt=""
@@ -41,7 +41,12 @@
 </template>
 
 <script setup lang="ts">
-import { useMusicStore } from "../../stores/music";
+import { useMusicStore } from "@/stores/music";
+import { storeToRefs } from "pinia";
+
+// import type {music} from '../../stores/music'
+const { isPlaying } = storeToRefs(useMusicStore());
+const { setPlayMusic } = useMusicStore();
 
 const { song } = defineProps({
   song: {
@@ -49,7 +54,6 @@ const { song } = defineProps({
     default: () => {},
   },
 });
-const { setPlayMusic } = useMusicStore();
 
 const handlePlay = () => {
   console.log(song);

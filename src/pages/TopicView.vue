@@ -26,7 +26,6 @@ const { coverImageURL, description, key, playlist, title } = toRefs(topic);
 const { id } = useRoute().params;
 onMounted(async () => {
   const res = await getTopicDetail(id as string);
-  console.log(res);
   topic.coverImageURL = res.topic.coverImageURL;
   topic.description = res.topic.description;
   topic.key = res.topic.key;

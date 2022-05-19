@@ -113,6 +113,22 @@ watchEffect(() => {
     volume.value = playerRef.value.volume;
   }
 });
+watchEffect(() => {
+  // if (getCurrentMusic.value) {
+  //   if (!getCurrentMusic.value.streamUrls) {
+  //     nextMusic();
+  //   } else {
+  //     // playerRef.value.src = "";
+  //   }
+  // } else {
+  //   playerRef.value.src = "";
+  // }
+  if (getCurrentMusic.value) {
+    console.log(getCurrentMusic.value);
+  } else {
+    console.log("null");
+  }
+});
 const handlePlay = () => {
   playerRef.value.play();
   isPlaying.value = true;
